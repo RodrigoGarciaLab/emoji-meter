@@ -1,26 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { connect } from 'react-redux';
+import { fetchEmojiData } from './redux/actions/emojis';
+import Menu from './menu';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  componentDidMount() {
+    this.props.fetchEmojiData();
+  }
+
+  render() {
+    return (
+        <div>
+          <Menu data={this.props.emojis && this.props.emojis.data}/>
+        </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchEmojiData: () => dispatch(fetchEmojiData())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
